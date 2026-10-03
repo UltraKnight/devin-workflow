@@ -82,6 +82,21 @@ npm config get prefix
 
 The global bin directory is under that prefix (typically `<prefix>/bin`).
 
+## Environment Configuration
+
+The CLI reads its environment file from exactly `~/.config/devin-workflow/.env`. It does not load `.env` from the project root or `~/.config/.env`.
+
+From the workflow repository, create the configuration directory and copy the example:
+
+```bash
+mkdir -p ~/.config/devin-workflow
+cp .env.example ~/.config/devin-workflow/.env
+```
+
+Set `DEVIN_API_KEY` and `DEVIN_ORG_ID` in that file for remote Devin sessions. `DEVIN_PLAYBOOK_ID` is optional. The example sets `DEVIN_REPO=.`; clear that value (`DEVIN_REPO=`) if you want the CLI to detect the repository from the current Git remote. Any nonempty `DEVIN_REPO` value is used as a repository identifier, so `.` disables remote auto-detection.
+
+Keep this configuration file and its credentials out of Git. Do not copy credentials into a project-root `.env` or commit them.
+
 ## Run Locally
 
 Install Devin CLI if it is not already available:
@@ -106,4 +121,6 @@ List runs started through this CLI:
 devin-workflow history
 ```
 
-Metadata is stored in `~/.config/devin-workflow/history.jsonl`; prompt contents are not stored. For remote sessions, the CLI prints the Devin organization ID, session ID, and URL. Check that the organization ID matches the organization selected in Devin when locating the session in its web history.
+The CLI stores one metadata record per run in `~/.config/devin-workflow/history.jsonl`. Records include the workflow mode and template, title, repository, status, and creation time. Remote records also include the organization ID, Devin session ID, and URL; local records include the working directory. This is metadata only: it does not save the generated prompt or project state, and local records do not include a Devin session ID. `devin-workflow history` only lists those records; the wrapper has no resume or recovery feature.
+
+To find a remote session, open its recorded URL or locate it by session ID in Devin, and check that Devin is showing the recorded organization ID. To browse local Devin CLI sessions for the current directory, use `devin list` as described in the companion usage guide; this is for browsing only and does not resume a workflow through this wrapper. To start work again from a target project, change to that project and run a workflow command such as `devin-workflow feature` (or `devin-workflow feature --local`). This starts a new workflow, not a continuation of the previous one.
