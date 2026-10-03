@@ -1,0 +1,23 @@
+{
+  "name": "devin-workflow",
+  "version": "1.0.0",
+  "description": "Reusable Planner → Implementer → Reviewer workflow for Devin",
+  "license": "ISC",
+  "author": "Vanderlei Martins",
+  "private": true,
+  "type": "commonjs",
+  "main": "index.js",
+  "bin": {
+    "devin-workflow": "./tools/devin/cli.mjs"
+  },
+  "scripts": {
+    "devin": "node tools/devin/cli.mjs",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7"
+  }
+}
